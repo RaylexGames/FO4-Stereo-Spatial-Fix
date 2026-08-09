@@ -1,0 +1,9 @@
+*.obj
+*.dll
+*.lib
+*.exp
+*.pdb
+*.ilk
+/build/
+/out/
+.vs/
