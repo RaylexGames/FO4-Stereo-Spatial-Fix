@@ -1,0 +1,8 @@
+LIBRARY KERNEL32.dll
+EXPORTS
+GetModuleHandleW
+GetProcAddress
+VirtualProtect
+FlushInstructionCache
+GetCurrentProcess
+OutputDebugStringA
