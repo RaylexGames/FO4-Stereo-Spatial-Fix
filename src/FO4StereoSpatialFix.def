@@ -1,0 +1,4 @@
+LIBRARY FO4StereoSpatialFix.dll
+EXPORTS
+    F4SEPlugin_Load
+    F4SEPlugin_Version DATA
