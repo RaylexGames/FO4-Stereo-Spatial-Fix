@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
+  <moduleName>FO4 Stereo Spatial Fix v0.2.1</moduleName>
+  <installSteps order="Explicit">
+    <installStep name="Select your Fallout 4 generation">
+      <optionalFileGroups order="Explicit">
+        <group name="Fallout 4 Version" type="SelectExactlyOne">
+          <plugins order="Explicit">
+            <plugin name="Next Gen - Fallout 4 1.11.221">
+              <description><![CDATA[
+For Fallout 4 1.11.221 with F4SE 0.7.8.
+
+Choose this option for the Next Gen runtime.
+Do not choose this option for Fallout 4 1.10.163.
+              ]]></description>
+              <files>
+                <file source="variants/NextGen/F4SE/Plugins/FO4StereoSpatialFix.dll"
+                      destination="F4SE/Plugins/FO4StereoSpatialFix.dll"
+                      priority="0" />
+              </files>
+              <typeDescriptor><type name="Optional" /></typeDescriptor>
+            </plugin>
+            <plugin name="Old Gen - Fallout 4 1.10.163">
+              <description><![CDATA[
+For Fallout 4 1.10.163 with F4SE 0.6.23.
+
+Choose this option for the pre-Next Gen runtime.
+Do not choose this option for Fallout 4 1.11.221.
+              ]]></description>
+              <files>
+                <file source="variants/OldGen/F4SE/Plugins/FO4StereoSpatialFix.dll"
+                      destination="F4SE/Plugins/FO4StereoSpatialFix.dll"
+                      priority="0" />
+              </files>
+              <typeDescriptor><type name="Optional" /></typeDescriptor>
+            </plugin>
+          </plugins>
+        </group>
+      </optionalFileGroups>
+    </installStep>
+  </installSteps>
+</config>

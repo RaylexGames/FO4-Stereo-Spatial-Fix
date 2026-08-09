@@ -1,35 +1,43 @@
-# Build instructions
+# Building FO4 Stereo Spatial Fix v0.2.1
 
-FO4 Stereo Spatial Fix is intentionally small and can be built as a freestanding Windows x64 DLL with `clang-cl` and `lld-link`.
+The project builds two DLLs from the same C source file.
 
-## Requirements
+Requirements:
 
-- Windows x64
-- LLVM/Clang toolchain with `clang-cl`
+- LLVM/Clang with `clang-cl`
 - `lld-link`
-- Windows SDK providing `kernel32.lib` (recommended)
+- x64 Windows target
 
-## Build
-
-From the repository root:
+## 1. Create the minimal KERNEL32 import library
 
 ```bat
-clang-cl --target=x86_64-pc-windows-msvc /c /O2 /GS- /GR- /Zl /Fo:FO4StereoSpatialFix.obj src\FO4StereoSpatialFix.c
-lld-link /DLL /NOENTRY /MACHINE:X64 /NODEFAULTLIB /DEF:src\FO4StereoSpatialFix.def /OUT:FO4StereoSpatialFix.dll FO4StereoSpatialFix.obj kernel32.lib
+lld-link /lib /machine:x64 /def:src\kernel32.def /out:kernel32.lib
 ```
 
-`src/kernel32.def` is also included as a minimal import definition for freestanding/custom toolchain setups.
+## 2. Build Next Gen
 
-## Output
+Targets Fallout 4 1.11.221 and the F4SE 0.7.x declarative plugin ABI.
 
-The resulting plugin should be installed at:
+```bat
+clang-cl --target=x86_64-pc-windows-msvc /c /O2 /GS- /GR- /Zl /Fo:FO4StereoSpatialFix.nextgen.obj src\FO4StereoSpatialFix.c
 
-```text
-Data\F4SE\Plugins\FO4StereoSpatialFix.dll
+lld-link /DLL /NOENTRY /MACHINE:X64 /NODEFAULTLIB ^
+  /DEF:src\FO4StereoSpatialFix.nextgen.def ^
+  /OUT:FO4StereoSpatialFix.nextgen.dll ^
+  FO4StereoSpatialFix.nextgen.obj kernel32.lib
 ```
 
-## Notes
+## 3. Build Old Gen
 
-- The project intentionally avoids the CRT.
-- No CommonLibF4 or Address Library is required.
-- v0.1.1 uses a PE import-table hook rather than hardcoded Fallout 4 runtime offsets.
+Targets Fallout 4 1.10.163 and the F4SE 0.6.x Query/Load ABI.
+
+```bat
+clang-cl --target=x86_64-pc-windows-msvc /DFO4SSF_OLDGEN=1 /c /O2 /GS- /GR- /Zl /Fo:FO4StereoSpatialFix.oldgen.obj src\FO4StereoSpatialFix.c
+
+lld-link /DLL /NOENTRY /MACHINE:X64 /NODEFAULTLIB ^
+  /DEF:src\FO4StereoSpatialFix.oldgen.def ^
+  /OUT:FO4StereoSpatialFix.oldgen.dll ^
+  FO4StereoSpatialFix.oldgen.obj kernel32.lib
+```
+
+The two builds share the same topology and matrix-correction implementation. Only the F4SE loader adapter differs.
